@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import numpy as np, cv2, sys, os, math, random, time
+import numpy as np, cv2, sys, os, math, random, time, cPickle as pickle
 
 #--------------------------------------------------------------------
 
@@ -358,9 +358,14 @@ def report_results():
     cv2.imshow("viz", padded_img)
     cv2.waitKey(0)
 
-    # write files as output
+    # write image files as output
     cv2.imwrite(sys.argv[1].replace(".","-capped."), cell_mask*capped_img*255)
     cv2.imwrite(sys.argv[1].replace(".","-honey." ), cell_mask*honey_img *255)
+
+    # write raw data as output as well, in case we need it later
+    pickle.dump(capped_polygons, open("".join(sys.argv[1].split(".")[:-1])+"-capped-poly.pickle", "wb"))
+    pickle.dump(honey_polygons,  open("".join(sys.argv[1].split(".")[:-1])+"-honey-poly.pickle",  "wb"))
+    pickle.dump(circles,         open("".join(sys.argv[1].split(".")[:-1])+"-circles.pickle",     "wb"))
 
     # print summary
     print("========== RESULTS =========")
