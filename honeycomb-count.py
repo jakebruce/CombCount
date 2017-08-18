@@ -363,9 +363,12 @@ def report_results():
     cv2.imwrite(sys.argv[1].replace(".","-honey." ), cell_mask*honey_img *255)
 
     # write raw data as output as well, in case we need it later
-    pickle.dump(capped_polygons, open("".join(sys.argv[1].split(".")[:-1])+"-capped-poly.pickle", "wb"))
-    pickle.dump(honey_polygons,  open("".join(sys.argv[1].split(".")[:-1])+"-honey-poly.pickle",  "wb"))
-    pickle.dump(circles,         open("".join(sys.argv[1].split(".")[:-1])+"-circles.pickle",     "wb"))
+    stats = {"img.shape"       : img.shape,
+             "capped_polygons" : capped_polygons,
+             "honey_polygons"  : honey_polygons,
+             "circles"         : circles,
+             "spacing"         : spacing}
+    pickle.dump(stats, open("".join(sys.argv[1].split(".")[:-1])+"-stats.pickle", "wb"))
 
     # print summary
     print("========== RESULTS =========")
