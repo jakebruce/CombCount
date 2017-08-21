@@ -417,7 +417,11 @@ if __name__ == "__main__":
     honey_polygons  = []
 
     cv2.namedWindow("viz", cv2.WINDOW_NORMAL)
-    if FULLSCREEN: cv2.setWindowProperty("viz", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    if FULLSCREEN:
+        # hedging for OpenCV2 vs OpenCV3
+        try:    fullscreen_flag = cv2.WINDOW_FULLSCREEN
+        except: fullscreen_flag = cv2.cv.CV_WINDOW_FULLSCREEN
+        cv2.setWindowProperty("viz", cv2.WND_PROP_FULLSCREEN, fullscreen_flag)
     cv2.setMouseCallback("viz", handle_mouse)
 
     #--------------------------------------------------------------------
