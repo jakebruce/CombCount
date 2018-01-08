@@ -22,7 +22,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import numpy as np, cv2, sys, os, math, random, time, cPickle as pickle
+import numpy as np, cv2, sys, os, math, random, time
+
+if sys.version_info < (2, 6):
+    import cPickle as pickle
+else:
+    import pickle
 
 #--------------------------------------------------------------------
 
@@ -32,10 +37,10 @@ DS                   = 1.0   # downsampling factor
 PADDING              = 200   # padding for instruction messages
 POLY_ALPHA           = 0.50  # opacity of selected polygons
 CIRC_ALPHA           = 0.50  # opacity of detected circles
-CELL_INFLATE         = 1.3   # inflate the size of detected cells by this much to cover edges
+CELL_INFLATE         = 1.25   # inflate the size of detected cells by this much to cover edges
 DETECT_DS            = 0.5   # downsampling factor for circle detection, speeds up threshold adjustment step
 REDETECT_ON_FULL_IMG = False # after downsampled threshold selection stage, re-detect with full img
-FULLSCREEN           = True  # open cv2 window fullscreen
+FULLSCREEN           = False  # open cv2 window fullscreen
 
 #--------------------------------------------------------------------
 
@@ -191,7 +196,7 @@ def detect_circles():
 
         return
     elif key == 27:
-        print "Canceled. Exiting..."
+        print ("Canceled. Exiting...")
         sys.exit(0)
 
     if key != 255:
@@ -287,7 +292,7 @@ def select_regions():
             report_results()
             sys.exit(0)
         elif key == 27:
-            print "Canceled. Exiting.."
+            print ("Canceled. Exiting...")
             sys.exit(0)
 
     # currently selecting capped region
@@ -390,7 +395,7 @@ def report_results():
 if __name__ == "__main__":
 
     if len(sys.argv) < 2:
-        print "Usage: %s <image-file>" % sys.argv[0]
+        print ("Usage: %s <image-file>" % sys.argv[0])
         sys.exit(1)
 
     try:
@@ -399,9 +404,9 @@ if __name__ == "__main__":
         img     = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2LAB)
     except cv2.error as e:
         errstr = "| Error reading image '%s'. Are you sure it exists? |" % sys.argv[1]
-        print "-"*len(errstr)
-        print errstr
-        print "-"*len(errstr)
+        print ("-"*len(errstr))
+        print (errstr)
+        print ("-"*len(errstr))
         sys.exit(1)
 
     corners = []
@@ -417,11 +422,7 @@ if __name__ == "__main__":
     honey_polygons  = []
 
     cv2.namedWindow("viz", cv2.WINDOW_NORMAL)
-    if FULLSCREEN:
-        # hedging for OpenCV2 vs OpenCV3
-        try:    fullscreen_flag = cv2.WINDOW_FULLSCREEN
-        except: fullscreen_flag = cv2.cv.CV_WINDOW_FULLSCREEN
-        cv2.setWindowProperty("viz", cv2.WND_PROP_FULLSCREEN, fullscreen_flag)
+    if FULLSCREEN: cv2.setWindowProperty("viz", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
     cv2.setMouseCallback("viz", handle_mouse)
 
     #--------------------------------------------------------------------
