@@ -343,7 +343,7 @@ def report_results():
 
     # display capped area
     capped_viz = viz_img.copy()
-    capped_viz[cell_mask*capped_img <= 0,:] /= 4
+    capped_viz[cell_mask*capped_img <= 0,:] = capped_viz[cell_mask*capped_img <= 0,:] / 4
     padded_img = np.full((capped_viz.shape[0]+PADDING, capped_viz.shape[1], 3), (255,255,255), dtype=np.uint8)
     padded_img[:-PADDING,:,:] = capped_viz
     cv2.putText(padded_img, "Capped region %s / %s pixels, %f of total area" % (capped_area, total_area, capped_frac),
@@ -354,7 +354,7 @@ def report_results():
 
     # display honey area
     honey_viz = viz_img.copy()
-    honey_viz[ cell_mask*honey_img  <= 0,:] /= 4
+    honey_viz[ cell_mask*honey_img  <= 0,:] = honey_viz[ cell_mask*honey_img  <= 0,:] / 4
     padded_img = np.full((honey_viz.shape[0]+PADDING, honey_viz.shape[1], 3), (255,255,255), dtype=np.uint8)
     padded_img[:-PADDING,:,:] = honey_viz
     cv2.putText(padded_img, "Honey region %s / %s pixels, %f of total area" % (honey_area, total_area, honey_frac),
