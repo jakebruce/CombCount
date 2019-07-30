@@ -372,7 +372,8 @@ def report_results():
              "capped_polygons" : capped_polygons,
              "honey_polygons"  : honey_polygons,
              "circles"         : circles,
-             "spacing"         : spacing}
+             "spacing"         : spacing,
+             "corners"         : corners }
     pickle.dump(stats, open("".join(sys.argv[1].split(".")[:-1])+"-stats.pickle", "wb"))
 
     # print summary
